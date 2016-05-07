@@ -2,6 +2,7 @@ import re
 import random
 import twitter
 import unicodedata
+from pickle import load
 
 keyIn = open("keys.txt").read().splitlines()
 api = twitter.Api(consumer_key=keyIn[0],consumer_secret=keyIn[1],access_token_key=keyIn[2],access_token_secret=keyIn[3])
@@ -10,45 +11,21 @@ accounts = open("accounts.txt").read().splitlines()
 
 tweets = []
 
-def process(text):
-	text = text.replace("\n"," ")
-	text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore')
-	escapes = ''.join([chr(char) for char in range(1, 32)])
-	text = text.translate(None,escapes)
-	#text = " ".join(filter(lambda x:x[0]!='@', text.split()))
-	return text.split(" ")
+dic = load(open("dict.pkl","rb"))
 
-for account in accounts:
-	statuses = api.GetUserTimeline(screen_name=account)
-	print "Processing " + account
-	for tweet in statuses:
-		tweets.append(process(tweet.text))
-
-tree = {}
-cur = tree
-
-for tweet in tweets:
-	for word in tweet:
-		if word in cur:
-			cur = cur[word]
-		else:
-			cur[word] = {}
-			cur = cur[word]
-	cur['END_TWEET'] = ""
-	cur = tree
-
-def genTweet():
-	cur = tree
+def genTweet(x,dic):
 	tweet = ""
-	while True:
-		nex = random.sample(cur.keys(),1)[0]
-		if nex == 'END_TWEET':
-			break
+	last = random.choice(dic[random.sample(dic.keys(),1)[0]])
+	tweet += last
+	tweet += " "
+	for i in range(x):
+		if last in dic:
+			word = random.choice(dic[last])
+		else:
+			word = random.choice(dic[random.sample(dic.keys(),1)[0]])
+		tweet += word
 		tweet += " "
-		tweet += nex
-		cur = cur[nex]
-	return tweet
+		last = word
+	return tweet[:-1]
 
-x = genTweet()
-while len(x.split(" ")) < 10:
-	x = genTweet()
+print genTweet(10,dic)
