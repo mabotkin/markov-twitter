@@ -11,9 +11,9 @@ accounts = open("accounts.txt").read().splitlines()
 
 tweets = []
 
-dic = load(open("dict.pkl","rb"))
 
-def genTweet(dic):
+def genTweet():
+	dic = load(open("dict.pkl","rb"))
 	tweet = ""
 	last = random.choice(dic[random.sample(dic.keys(),1)[0]])
 	tweet += last
@@ -30,7 +30,7 @@ def genTweet(dic):
 	return prevtweet[:-1]
 
 def post():
-	api.PostUpdate(genTweet(dic))
+	api.PostUpdate(genTweet())
 #fout = open("log.txt","w")
 #fout.write(tweet + "\n")
 #fout.close()
