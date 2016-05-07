@@ -20,6 +20,7 @@ def process(text):
 
 for account in accounts:
 	statuses = api.GetUserTimeline(screen_name=account)
+	print "Processing " + account
 	for tweet in statuses:
 		tweets.append(process(tweet.text))
 
@@ -36,4 +37,18 @@ for tweet in tweets:
 	cur['END_TWEET'] = ""
 	cur = tree
 
-		
+def genTweet():
+	cur = tree
+	tweet = ""
+	while True:
+		nex = random.sample(cur.keys(),1)[0]
+		if nex == 'END_TWEET':
+			break
+		tweet += " "
+		tweet += nex
+		cur = cur[nex]
+	return tweet
+
+x = genTweet()
+while len(x.split(" ")) < 10:
+	x = genTweet()
