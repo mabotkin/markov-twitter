@@ -35,11 +35,9 @@ def genDict():
 				dic[prev] = []
 				dic[prev].append(word)
 			prev = word
-	return dic
+	fout = open('dict.pkl','wb')
 
-fout = open('dict.pkl','wb')
+	dump(dic,fout,protocol=2)
 
-dic = genDict()
-dump(dic,fout,protocol=2)
+	fout.close()
 
-fout.close()

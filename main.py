@@ -13,12 +13,13 @@ tweets = []
 
 dic = load(open("dict.pkl","rb"))
 
-def genTweet(x,dic):
+def genTweet(dic):
 	tweet = ""
 	last = random.choice(dic[random.sample(dic.keys(),1)[0]])
 	tweet += last
 	tweet += " "
-	for i in range(x):
+	while len(tweet) < 140:
+		prevtweet = tweet
 		if last in dic:
 			word = random.choice(dic[last])
 		else:
@@ -26,6 +27,10 @@ def genTweet(x,dic):
 		tweet += word
 		tweet += " "
 		last = word
-	return tweet[:-1]
+	return prevtweet[:-1]
 
-print genTweet(10,dic)
+def post():
+	api.PostUpdate(genTweet(dic))
+#fout = open("log.txt","w")
+#fout.write(tweet + "\n")
+#fout.close()
