@@ -30,7 +30,9 @@ def genTweet():
 	return prevtweet[:-1]
 
 def post():
-	api.PostUpdate(genTweet())
+	tweet = genTweet()
+	api.PostUpdate(tweet)
+	return tweet
 #fout = open("log.txt","w")
 #fout.write(tweet + "\n")
 #fout.close()

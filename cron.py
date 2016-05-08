@@ -5,13 +5,11 @@ import main
 import genDict
 
 def job():
-	main.post()
-
-def update():
 	genDict.genDict()
+	print "Regenerated Markov Chain"
+	print "Tweeted: " + str(main.post())
 
 schedule.every().hour.do(job)
-schedule.every().day.at("00:05").do(update)
 
 while 1:
 	schedule.run_pending()
