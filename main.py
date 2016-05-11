@@ -20,13 +20,17 @@ def genTweet():
 	tweet += " "
 	while len(tweet) < 140:
 		prevtweet = tweet
+		word = ""
 		if last in dic:
 			word = random.choice(dic[last])
 		else:
 			word = random.choice(dic[random.sample(dic.keys(),1)[0]])
-		tweet += word
-		tweet += " "
-		last = word
+		if word == "&amp;":
+			last = word
+		else:
+			tweet += word
+			tweet += " "
+			last = word
 	return prevtweet[:-1]
 
 def post():
