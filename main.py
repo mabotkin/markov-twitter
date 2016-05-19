@@ -2,6 +2,7 @@ import re
 import random
 import twitter
 import unicodedata
+import language_check
 from pickle import load
 
 keyIn = open("keys.txt").read().splitlines()
@@ -11,6 +12,10 @@ accounts = open("accounts.txt").read().splitlines()
 
 tweets = []
 
+def proofread(text):
+	tool = language_check.LanguageTool('en-US')
+	matches = tool.check(text)
+	return language_check.correct(text,matches)
 
 def genTweet():
 	dic = load(open("dict.pkl","rb"))
@@ -31,7 +36,11 @@ def genTweet():
 			tweet += word
 			tweet += " "
 			last = word
-	return prevtweet[:-1]
+	prevtweet = prevtweet[:-1]
+	if len(prevtweet) >= 140:
+		return genTweet()
+	prevtweet = proofread(prevtweet)
+	return prevtweet
 
 def post():
 	tweet = genTweet()
