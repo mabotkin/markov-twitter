@@ -15,7 +15,9 @@ tweets = []
 def proofread(text):
 	tool = language_check.LanguageTool('en-US')
 	matches = tool.check(text)
-	return language_check.correct(text,matches)
+	text = language_check.correct(text,matches)
+	text = unicodedata.normalize('NFKD', text).encode('ascii', 'ignore')
+	return text
 
 def genTweet():
 	dic = load(open("dict.pkl","rb"))
@@ -44,7 +46,11 @@ def genTweet():
 
 def post():
 	tweet = genTweet()
-	api.PostUpdate(tweet)
+	try:
+		api.PostUpdate(tweet)
+	except:
+		tweet = genTweet()
+		api.PostUpdate(tweet)
 	return tweet
 #fout = open("log.txt","w")
 #fout.write(tweet + "\n")
