@@ -11,7 +11,7 @@ def job():
 
 schedule.every().hour.do(job)
 
-job()
+print "Tweeted: " + str(main.post())
 while 1:
 	schedule.run_pending()
 	time.sleep(1)
